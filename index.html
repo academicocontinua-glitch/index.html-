@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JARVIS System</title>
-  <link rel="icon" href="mascota.png.jfif">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -50,12 +49,6 @@
       font-size: 1.1rem;
       font-weight: bold;
       color: var(--primary-glow);
-    }
-    .brand img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
     }
     .clock-container {
       display: flex;
@@ -206,8 +199,7 @@
 
   <header class="top-bar">
     <div class="brand">
-      <img src="mascota.png.jfif" alt="Logo" onerror="this.src='https://via.placeholder.com/32'">
-      JARVIS SYSTEM
+      <span>&#x2B21;</span> JARVIS SYSTEM
     </div>
     <div class="clock-container">
       <div id="clock" class="clock">00:00:00</div>
@@ -300,7 +292,7 @@
       user(texto);
 
       if (texto.toLowerCase().indexOf("hola") !== -1) {
-        bot("¡Hola! Nuevo sistema Jarvis activo. ¿En qué puedo ayudarte?");
+        bot("¡Hola! Sistema activo. ¿En qué puedo ayudarte?");
       } else {
         bot("Mensaje recibido: " + texto);
       }
