@@ -1,227 +1,283 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JARVIS Interface</title>
-  <style>
-    :root {
-      --primary: #00f3ff;
-      --bg-dark: rgba(10, 15, 26, 0.85);
-      --border-color: rgba(0, 243, 255, 0.4);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarvis - Asistente Virtual</title>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-    }
+<!-- Favicon / Ícono de la pestaña -->
+<link rel="icon" href="mascota.png.jfif">
 
-    body {
-      background-color: #050811;
-      background-image: radial-gradient(circle at center, #0c1b33 0%, #050811 100%);
-      color: #fff;
-      height: 100vh;
+<!-- Fuente Google Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #EAEFF5;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 450px) {
+    #app {
+      height: 90vh;
+      border-radius: 20px;
       overflow: hidden;
     }
+  }
 
-    /* Top Navigation Bar */
-    .top-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background: var(--bg-dark);
-      border-bottom: 1px solid var(--border-color);
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      z-index: 1000;
-      backdrop-filter: blur(5px);
-    }
+  /* Encabezado */
+  #header {
+    background: #003A8F;
+    color: #FFFFFF;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-    /* System Status / Brand */
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--primary);
-      text-shadow: 0 0 8px var(--primary);
-    }
+  .avatar-header {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #FFFFFF;
+  }
 
-    /* Digital Clock */
-    .clock-container {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
+  .header-info {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .clock {
-      font-size: 1.4rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: var(--primary);
-      text-shadow: 0 0 10px var(--primary);
-    }
+  .header-info .title {
+    font-size: 16px;
+    font-weight: 600;
+  }
 
-    .date {
-      font-size: 0.75rem;
-      color: #8a9ba8;
-      letter-spacing: 1px;
-    }
+  .header-info .status {
+    font-size: 12px;
+    opacity: 0.85;
+  }
 
-    /* Bottom Taskbar & Sliding Menu */
-    .taskbar-wrapper {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 1000;
-    }
+  /* Área del Chat */
+  #chat {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #F8FAFC;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-    /* Sliding Menu Drawer */
-    .menu-drawer {
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
-      width: 320px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-      box-shadow: 0 -5px 25px rgba(0, 243, 255, 0.2);
-      backdrop-filter: blur(10px);
-    }
+  .msg {
+    max-width: 80%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: fadeIn 0.2s ease-in-out;
+  }
 
-    .menu-drawer.open {
-      max-height: 250px;
-      padding: 15px 0;
-    }
+  .bot {
+    background: #E2E8F0;
+    color: #1E293B;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
 
-    .menu-options {
-      list-style: none;
-    }
+  .user {
+    background: #003A8F;
+    color: #FFFFFF;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
 
-    .menu-options li a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 25px;
-      color: #e0f7fc;
-      text-decoration: none;
-      font-size: 0.95rem;
-      letter-spacing: 1px;
-      transition: all 0.2s ease;
-    }
+  .time {
+    font-size: 10px;
+    opacity: 0.7;
+    text-align: right;
+    margin-top: 4px;
+  }
 
-    .menu-options li a:hover {
-      background: rgba(0, 243, 255, 0.15);
-      color: var(--primary);
-      padding-left: 30px;
-      text-shadow: 0 0 5px var(--primary);
-    }
+  /* Área de entrada de texto */
+  #inputArea {
+    padding: 12px;
+    background: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    gap: 8px;
+  }
 
-    /* Taskbar Trigger Button */
-    .taskbar-trigger {
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-bottom: none;
-      border-radius: 15px 15px 0 0;
-      padding: 10px 40px;
-      cursor: pointer;
-      color: var(--primary);
-      font-weight: bold;
-      letter-spacing: 2px;
-      box-shadow: 0 -2px 15px rgba(0, 243, 255, 0.3);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  #input {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 1px solid #CBD5E1;
+    border-radius: 24px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
 
-    .taskbar-trigger:hover {
-      background: rgba(0, 243, 255, 0.1);
-      box-shadow: 0 -2px 20px rgba(0, 243, 255, 0.6);
-    }
+  #input:focus {
+    border-color: #003A8F;
+  }
 
-    .icon-arrow {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #003A8F;
+    color: #FFFFFF;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
 
-    .menu-drawer.open + .taskbar-trigger .icon-arrow {
-      transform: rotate(180deg);
-    }
-  </style>
+  .send-btn:hover {
+    background: #002B6B;
+  }
+
+  /* Pie de página de créditos */
+  .footer-creditos {
+    text-align: center;
+    font-size: 11px;
+    color: #64748B;
+    padding: 8px;
+    background: #F1F5F9;
+    border-top: 1px solid #E2E8F0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 </head>
+
 <body>
 
-  <header class="top-bar">
-    <div class="brand">
-      <span>&#x2B21;</span> JARVIS
+<div id="app">
+  <div id="header">
+    <img class="avatar-header" src="mascota.png.jfif" alt="Jarvis Avatar" onerror="this.src='https://via.placeholder.com/40'">
+    <div class="header-info">
+      <span class="title">Jarvis</span>
+      <span class="status">● En línea</span>
     </div>
-    <div class="clock-container">
-      <div id="clock" class="clock">00:00:00</div>
-      <div id="date" class="date">CARGANDO...</div>
-    </div>
-  </header>
-
-  <div class="taskbar-wrapper">
-    <div id="menuDrawer" class="menu-drawer">
-      <ul class="menu-options">
-        <li><a href="#diagnostics"><span>&#x2699;</span> Diagnóstico del Sistema</a></li>
-        <li><a href="#protocol"><span>&#x1F6E1;</span> Protocolos de Seguridad</a></li>
-        <li><a href="#network"><span>&#x1F4E1;</span> Red y Comandancia</a></li>
-        <li><a href="#power"><span>&#x26A1;</span> Gestión de Energía</a></li>
-      </ul>
-    </div>
-    <button id="taskbarTrigger" class="taskbar-trigger">
-      MENÚ <span class="icon-arrow">&#x25B2;</span>
-    </button>
   </div>
 
-  <script>
-    // Digital Clock Logic
-    function updateClock() {
-      const now = new Date();
-      
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+  <div id="chat"></div>
 
-      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-      document.getElementById('date').textContent = now.toLocaleDateString('es-ES', options).toUpperCase();
+  <div id="inputArea">
+    <input id="input" type="text" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+    <button class="send-btn" id="btnEnviar">➤</button>
+  </div>
+
+  <div class="footer-creditos">
+    Desarrollado por: Lázaro Purizaca
+  </div>
+</div>
+
+<script>
+  const chat = document.getElementById("chat");
+  const input = document.getElementById("input");
+  const btnEnviar = document.getElementById("btnEnviar");
+
+  // Obtener hora actual en formato HH:MM
+  function obtenerHora() {
+    const ahora = new Date();
+    const horas = ahora.getHours().toString().padStart(2, '0');
+    const minutos = ahora.getMinutes().toString().padStart(2, '0');
+    return `${horas}:${minutos}`;
+  }
+
+  // Insertar mensaje del bot
+  function botMensaje(texto) {
+    const div = document.createElement("div");
+    div.className = "msg bot";
+    div.innerHTML = `${texto}<div class="time">${obtenerHora()}</div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  // Insertar mensaje del usuario
+  function usuarioMensaje(texto) {
+    const div = document.createElement("div");
+    div.className = "msg user";
+    div.innerHTML = `${texto}<div class="time">${obtenerHora()}</div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  // Lógica de procesamiento de las respuestas del nuevo Jarvis
+  function procesarRespuesta(mensaje) {
+    const texto = mensaje.toLowerCase().trim();
+
+    // AQUÍ PUEDES AGREGAR O MODIFICAR LA LÓGICA DE TU NUEVO PROYECTO
+    if (texto.includes("hola") || texto.includes("buenas")) {
+      botMensaje("¡Hola! Soy Jarvis. ¿En qué te puedo ayudar con tu nuevo proyecto?");
+    } else if (texto.includes("quien eres") || texto.includes("quién eres")) {
+      botMensaje("Soy Jarvis, un asistente virtual creado para responder tus consultas rápidamente.");
+    } else if (texto.includes("creador") || texto.includes("desarrollador")) {
+      botMensaje("Fui creado por Lázaro Purizaca.");
+    } else {
+      botMensaje("Entendido. Aún me estoy configurando para responder a este nuevo tipo de consultas.");
     }
-    
-    setInterval(updateClock, 1000);
-    updateClock();
+  }
 
-    // Menu Drawer Toggle Logic
-    const trigger = document.getElementById('taskbarTrigger');
-    const drawer = document.getElementById('menuDrawer');
+  // Función para enviar mensaje
+  function enviar() {
+    const texto = input.value.trim();
+    if (texto === "") return;
 
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      drawer.classList.toggle('open');
-    });
+    usuarioMensaje(texto);
+    input.value = "";
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!drawer.contains(e.target) && !trigger.contains(e.target)) {
-        drawer.classList.remove('open');
-      }
-    });
-  </script>
+    // Simular un pequeño tiempo de respuesta de Jarvis
+    setTimeout(() => {
+      procesarRespuesta(texto);
+    }, 500);
+  }
+
+  // Event Listeners
+  btnEnviar.addEventListener("click", enviar);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      enviar();
+    }
+  });
+
+  // Mensaje de bienvenida al cargar
+  window.onload = () => {
+    botMensaje("¡Hola! Bienvenido al nuevo sistema de Jarvis 👋🏼. ¿En qué trabajaremos hoy?");
+  };
+</script>
+
 </body>
 </html>
