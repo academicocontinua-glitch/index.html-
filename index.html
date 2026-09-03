@@ -1,572 +1,560 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jarvis - Asistente Virtual</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARVIS - UDEP Interface</title>
 
-<!-- Favicon / Ícono de la pestaña -->
-<link rel="icon" href="mascota.png.jfif">
+  <!-- Favicon / Ícono de la pestaña -->
+  <link rel="icon" href="mascota.png.jfif">
 
-<!-- Fuente Google Poppins -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #EAEFF5;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #app {
-    width: 100%;
-    max-width: 420px;
-    height: 100vh;
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-
-  @media (min-width: 450px) {
-    #app {
-      height: 90vh;
-      border-radius: 20px;
-      overflow: hidden;
+  <style>
+    :root {
+      --primary: #003A8F;
+      --primary-glow: #00f3ff;
+      --bg-dark: rgba(10, 15, 26, 0.9);
+      --border-color: rgba(0, 243, 255, 0.4);
     }
-  }
 
-  /* Header Superior con Avatar */
-  #header {
-    background: #003A8F;
-    color: #FFFFFF;
-    padding: 14px 16px 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+    }
 
-  .avatar-header {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #FFFFFF;
-    border: 2px solid #FFFFFF;
-  }
+    body {
+      background-color: #050811;
+      background-image: radial-gradient(circle at center, #0c1b33 0%, #050811 100%);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .header-info {
-    display: flex;
-    flex-direction: column;
-  }
+    /* Top Navigation Bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
 
-  .header-info .title {
-    font-size: 16px;
-    font-weight: 600;
-  }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--primary-glow);
+      text-shadow: 0 0 8px var(--primary-glow);
+    }
 
-  .header-info .status {
-    font-size: 12px;
-    opacity: 0.85;
-  }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
 
-  /* BARRA DE TAREAS / PESTAÑAS DINÁMICAS (NAV TABS) */
-  #topBar {
-    background: #003A8F;
-    display: flex;
-    justify-content: space-around;
-    padding: 0 4px 6px 4px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  }
+    .clock-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
 
-  .tab-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 8px 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+    .clock {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--primary-glow);
+      text-shadow: 0 0 10px var(--primary-glow);
+    }
 
-  .tab-btn:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.1);
-  }
+    .date {
+      font-size: 0.7rem;
+      color: #8a9ba8;
+      letter-spacing: 1px;
+    }
 
-  .tab-btn.active {
-    color: #003A8F;
-    background: #FFFFFF;
-    font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+    /* Contenedor del Chat Principal */
+    #app-container {
+      flex: 1;
+      max-width: 480px;
+      width: 100%;
+      margin: 70px auto 70px auto;
+      display: flex;
+      flex-direction: column;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
 
-  /* Vistas dinámicas */
-  .view-panel {
-    flex: 1;
-    display: none;
-    flex-direction: column;
-    overflow-y: auto;
-    background: #F8FAFC;
-    padding: 16px;
-  }
+    #chat {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-  .view-panel.active {
-    display: flex;
-  }
+    .msg {
+      max-width: 80%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      animation: fadeIn 0.2s ease-in-out;
+    }
 
-  /* Mensajes de Chat */
-  .msg {
-    max-width: 80%;
-    padding: 12px 14px;
-    border-radius: 14px;
-    font-size: 14px;
-    line-height: 1.4;
-    word-wrap: break-word;
-    margin-bottom: 10px;
-    animation: fadeIn 0.2s ease-in-out;
-  }
+    .bot {
+      background: rgba(226, 232, 240, 0.95);
+      color: #0f172a;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
 
-  .bot {
-    background: #E2E8F0;
-    color: #1E293B;
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-  }
+    .user {
+      background: var(--primary);
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+      box-shadow: 0 0 10px rgba(0, 58, 143, 0.5);
+    }
 
-  .user {
-    background: #003A8F;
-    color: #FFFFFF;
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-  }
+    .time {
+      font-size: 9.5px;
+      opacity: 0.75;
+      text-align: right;
+      margin-top: 4px;
+    }
 
-  .time {
-    font-size: 10px;
-    opacity: 0.7;
-    text-align: right;
-    margin-top: 4px;
-  }
+    .btn-action {
+      width: 100%;
+      padding: 12px;
+      font-size: 13.5px;
+      margin: 4px 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      border: 1px solid var(--primary-glow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-  /* Tarjetas Dinámicas para Secciones */
-  .section-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: #003A8F;
-    margin-bottom: 12px;
-  }
+    .btn-action:hover {
+      background: #002b6b;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+    }
 
-  .card-item {
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .ctx-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 6px 0;
+    }
 
-  .card-item:hover {
-    border-color: #003A8F;
-    box-shadow: 0 4px 12px rgba(0, 58, 143, 0.08);
-    transform: translateY(-2px);
-  }
+    .ctx-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--primary-glow);
+      border: 1px solid var(--primary-glow);
+      padding: 8px 12px;
+      border-radius: 18px;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
 
-  .card-info {
-    display: flex;
-    flex-direction: column;
-  }
+    .ctx-btn:hover {
+      background: var(--primary-glow);
+      color: #050811;
+      font-weight: 600;
+    }
 
-  .card-info .card-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1E293B;
-  }
+    /* Input Area */
+    #inputArea {
+      padding: 12px;
+      background: rgba(10, 15, 26, 0.95);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 8px;
+    }
 
-  .card-info .card-desc {
-    font-size: 12px;
-    color: #64748B;
-    margin-top: 2px;
-  }
+    #input {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: rgba(5, 8, 17, 0.8);
+      color: #fff;
+      outline: none;
+    }
 
-  .card-icon {
-    font-size: 18px;
-  }
+    #input:focus {
+      border-color: var(--primary-glow);
+      box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    }
 
-  /* Botones Contextuales Dinámicos */
-  .ctx-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 6px 0 12px 0;
-    animation: fadeIn 0.3s ease;
-  }
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: 1px solid var(--primary-glow);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  .ctx-btn {
-    background: #FFFFFF;
-    color: #003A8F;
-    border: 1px solid #003A8F;
-    padding: 10px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s ease;
-    font-weight: 500;
-  }
+    /* Bottom Taskbar Drawer */
+    .taskbar-wrapper {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1000;
+    }
 
-  .ctx-btn:hover {
-    background: #003A8F;
-    color: #FFFFFF;
-  }
+    .menu-drawer {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      width: 320px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+      box-shadow: 0 -5px 25px rgba(0, 243, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
 
-  /* Área de Input */
-  #inputArea {
-    padding: 12px;
-    background: #FFFFFF;
-    border-top: 1px solid #E2E8F0;
-    display: flex;
-    gap: 8px;
-  }
+    .menu-drawer.open {
+      max-height: 280px;
+      padding: 15px 0;
+    }
 
-  #input {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 14px;
-    font-family: inherit;
-    border: 1px solid #CBD5E1;
-    border-radius: 24px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+    .menu-options {
+      list-style: none;
+    }
 
-  #input:focus {
-    border-color: #003A8F;
-  }
+    .menu-options li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 25px;
+      color: #e0f7fc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
 
-  .send-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #003A8F;
-    color: #FFFFFF;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-  }
+    .menu-options li a:hover {
+      background: rgba(0, 243, 255, 0.15);
+      color: var(--primary-glow);
+      padding-left: 30px;
+    }
 
-  .send-btn:hover {
-    background: #002B6B;
-  }
+    .taskbar-trigger {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      border-radius: 15px 15px 0 0;
+      padding: 8px 30px;
+      cursor: pointer;
+      color: var(--primary-glow);
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 -2px 15px rgba(0, 243, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
 
-  /* Footer */
-  .footer-creditos {
-    text-align: center;
-    font-size: 11px;
-    color: #64748B;
-    padding: 8px;
-    background: #F1F5F9;
-    border-top: 1px solid #E2E8F0;
-  }
+    .icon-arrow {
+      transition: transform 0.3s ease;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+    .menu-drawer.open + .taskbar-trigger .icon-arrow {
+      transform: rotate(180deg);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="app">
-  <!-- Encabezado Principal -->
-  <div id="header">
-    <img class="avatar-header" src="mascota.png.jfif" alt="Jarvis Avatar" onerror="this.src='https://via.placeholder.com/42'">
-    <div class="header-text">
-      <span class="title">Jarvis Assistant</span>
-      <span class="status">● Sistema dinámico activo</span>
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="brand">
+      <img src="mascota.png.jfif" alt="Logo" onerror="this.src='https://via.placeholder.com/32'">
+      JARVIS UDEP
     </div>
-  </div>
+    <div class="clock-container">
+      <div id="clock" class="clock">00:00:00</div>
+      <div id="date" class="date">CARGANDO...</div>
+    </div>
+  </header>
 
-  <!-- BARRA DE TAREAS DE NAVEGACIÓN SUPERIOR -->
-  <div id="topBar">
-    <button class="tab-btn active" onclick="cambiarVista('chatView', this)">💬 Chat</button>
-    <button class="tab-btn" onclick="cambiarVista('tramitesView', this)">🧭 Trámites</button>
-    <button class="tab-btn" onclick="cambiarVista('guiasView', this)">📂 Guías PDF</button>
-    <button class="tab-btn" onclick="cambiarVista('ayudaView', this)">❓ Ayuda</button>
-  </div>
-
-  <!-- VISTA 1: CHAT INTERACTIVO -->
-  <div id="chatView" class="view-panel active">
+  <!-- App Interface -->
+  <div id="app-container">
     <div id="chat"></div>
-  </div>
 
-  <!-- VISTA 2: MÓDULO DINÁMICO DE TRÁMITES -->
-  <div id="tramitesView" class="view-panel">
-    <span class="section-title">Trámites Frecuentes</span>
-    
-    <div class="card-item" onclick="ejecutarAccion('¿Cómo gestiono mi Bachiller o Grado?')">
-      <div class="card-info">
-        <span class="card-title">Bachiller / Egresados</span>
-        <span class="card-desc">Atención al egresado y grados</span>
-      </div>
-      <span class="card-icon">🎓</span>
-    </div>
-
-    <div class="card-item" onclick="ejecutarAccion('Información sobre cambio de carrera')">
-      <div class="card-info">
-        <span class="card-title">Cambio de Carrera</span>
-        <span class="card-desc">Solicitudes y requisitos vía secretaría</span>
-      </div>
-      <span class="card-icon">🔄</span>
-    </div>
-
-    <div class="card-item" onclick="ejecutarAccion('¿Cómo solicitar retiro de curso?')">
-      <div class="card-info">
-        <span class="card-title">Retiro de Curso / Carrera</span>
-        <span class="card-desc">Gestión directa a través del SIGA</span>
-      </div>
-      <span class="card-icon">🚫</span>
-    </div>
-
-    <div class="card-item" onclick="ejecutarAccion('Requisitos para constancias y certificados')">
-      <div class="card-info">
-        <span class="card-title">Documentos Oficiales</span>
-        <span class="card-desc">Certificados de estudios e historiales</span>
-      </div>
-      <span class="card-icon">📄</span>
+    <div id="inputArea">
+      <input id="input" type="text" placeholder="Escribe 'Hola' o tu consulta..." autocomplete="off">
+      <button class="send-btn" id="btnEnviar">➤</button>
     </div>
   </div>
 
-  <!-- VISTA 3: MÓDULO DE GUÍAS Y DOCUMENTOS -->
-  <div id="guiasView" class="view-panel">
-    <span class="section-title">Documentos Oficiales & Guías</span>
-
-    <div class="card-item" onclick="ejecutarAccion('Ver Reglamento General RFAG')">
-      <div class="card-info">
-        <span class="card-title">Reglamento General (RFAG)</span>
-        <span class="card-desc">Normativas académicas oficiales</span>
-      </div>
-      <span class="card-icon">📖</span>
+  <!-- Sliding Taskbar Menu -->
+  <div class="taskbar-wrapper">
+    <div id="menuDrawer" class="menu-drawer">
+      <ul class="menu-options">
+        <li><a onclick="ejecutarMenu('1')"><span>🕒</span> Horarios de Ventanilla</a></li>
+        <li><a onclick="ejecutarMenu('2')"><span>🏢</span> Horarios de Secretaría</a></li>
+        <li><a onclick="ejecutarMenu('3')"><span>📚</span> Reservar Sala de Estudio</a></li>
+        <li><a onclick="ejecutarMenu('4')"><span>📅</span> Calendario y Exámenes</a></li>
+        <li><a onclick="ejecutarMenu('tramites')"><span>🧭</span> Sección de Trámites</a></li>
+        <li><a onclick="ejecutarMenu('guias')"><span>📂</span> Documentos & Guías PDF</a></li>
+      </ul>
     </div>
-
-    <div class="card-item" onclick="ejecutarAccion('Ver Hoja de Reclamos PDF')">
-      <div class="card-info">
-        <span class="card-title">Hoja de Reclamos</span>
-        <span class="card-desc">Formato oficial de presentación</span>
-      </div>
-      <span class="card-icon">📝</span>
-    </div>
-
-    <div class="card-item" onclick="ejecutarAccion('Guía de Prácticas Pre Profesionales')">
-      <div class="card-info">
-        <span class="card-title">Prácticas Pre Profesionales</span>
-        <span class="card-desc">Convenios y requisitos de acreditación</span>
-      </div>
-      <span class="card-icon">💼</span>
-    </div>
+    <button id="taskbarTrigger" class="taskbar-trigger">
+      MENÚ <span class="icon-arrow">&#x25B2;</span>
+    </button>
   </div>
 
-  <!-- VISTA 4: CENTRO DE AYUDA Y SOPORTE -->
-  <div id="ayudaView" class="view-panel">
-    <span class="section-title">Centro de Contacto & Soporte</span>
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const btnEnviar = document.getElementById("btnEnviar");
+    let contextoGlobal = "";
 
-    <div class="card-item" onclick="ejecutarAccion('Horario de atención en secretaría')">
-      <div class="card-info">
-        <span class="card-title">Secretaría Académica</span>
-        <span class="card-desc">Horarios de atención y anexo 3113</span>
-      </div>
-      <span class="card-icon">🏢</span>
-    </div>
+    // Digital Clock
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 
-    <div class="card-item" onclick="ejecutarAccion('¿Cómo me comunico con Mesa de Ayuda?')">
-      <div class="card-info">
-        <span class="card-title">Mesa de Ayuda SIGA</span>
-        <span class="card-desc">Soporte para usuarios y contraseñas</span>
-      </div>
-      <span class="card-icon">🛠️</span>
-    </div>
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('date').textContent = now.toLocaleDateString('es-ES', options).toUpperCase();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    <div class="card-item" onclick="ejecutarAccion('¿Cómo reservar una sala de estudio?')">
-      <div class="card-info">
-        <span class="card-title">Salas de Estudio</span>
-        <span class="card-desc">Solicitud e información de reservas</span>
-      </div>
-      <span class="card-icon">📚</span>
-    </div>
-  </div>
+    // Drawer Logic
+    const trigger = document.getElementById('taskbarTrigger');
+    const drawer = document.getElementById('menuDrawer');
 
-  <!-- Entrada de texto inferior (Compartida para todas las vistas) -->
-  <div id="inputArea">
-    <input id="input" type="text" placeholder="Escribe tu mensaje..." autocomplete="off">
-    <button class="send-btn" id="btnEnviar">➤</button>
-  </div>
-
-  <div class="footer-creditos">
-    Desarrollado por: Lázaro Purizaca
-  </div>
-</div>
-
-<script>
-  const chat = document.getElementById("chat");
-  const input = document.getElementById("input");
-  const btnEnviar = document.getElementById("btnEnviar");
-
-  // Función dinámicamente adaptada para cambiar vistas desde la barra de tareas
-  function cambiarVista(vistaId, elementoBtn) {
-    document.querySelectorAll(".view-panel").forEach(panel => panel.classList.remove("active"));
-    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-
-    document.getElementById(vistaId).classList.add("active");
-    elementoBtn.classList.add("active");
-  }
-
-  // Obtener hora actual en formato HH:MM
-  function obtenerHora() {
-    const ahora = new Date();
-    const horas = ahora.getHours().toString().padStart(2, '0');
-    const minutos = ahora.getMinutes().toString().padStart(2, '0');
-    return `${horas}:${minutos}`;
-  }
-
-  // Limpiar botones contextuales antiguos
-  function limpiarContextuales() {
-    document.querySelectorAll(".ctx-container").forEach(el => el.remove());
-  }
-
-  // Insertar mensaje del bot
-  function botMensaje(texto) {
-    const div = document.createElement("div");
-    div.className = "msg bot";
-    div.innerHTML = `${texto}<div class="time">${obtenerHora()}</div>`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  // Insertar mensaje del usuario
-  function usuarioMensaje(texto) {
-    const div = document.createElement("div");
-    div.className = "msg user";
-    div.innerHTML = `${texto}<div class="time">${obtenerHora()}</div>`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  // Insertar botones dinámicos en la conversación
-  function crearBotonesDinamicos(opciones) {
-    limpiarContextuales();
-    const contenedor = document.createElement("div");
-    contenedor.className = "ctx-container";
-
-    opciones.forEach(item => {
-      const btn = document.createElement("button");
-      btn.className = "ctx-btn";
-      btn.innerHTML = item.texto;
-      btn.onclick = () => ejecutarAccion(item.valor);
-      contenedor.appendChild(btn);
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      drawer.classList.toggle('open');
     });
 
-    chat.appendChild(contenedor);
-    chat.scrollTop = chat.scrollHeight;
-  }
+    document.addEventListener('click', (e) => {
+      if (!drawer.contains(e.target) && !trigger.contains(e.target)) {
+        drawer.classList.remove('open');
+      }
+    });
 
-  // Lógica conversacional dinámica
-  function procesarRespuesta(mensaje) {
-    const texto = mensaje.toLowerCase().trim();
-    limpiarContextuales();
-
-    if (texto.includes("cambio de carrera")) {
-      botMensaje("📣 <b>Comunicado Cambio de Carrera:</b><br>Para solicitar un cambio de carrera, es necesario mandar un correo a secretaría académica para obtener todo de manera detallada y precisa.");
-    } 
-    else if (texto.includes("retiro")) {
-      botMensaje("📣 <b>Comunicado Retiro de Curso / Carrera:</b><br>Los retiros se hacen a través del SIGA en la sección de trámites. Para más información puedes enviar un correo a secretaría académica.");
+    function hora() {
+      const d = new Date();
+      return d.getHours() + ":" + d.getMinutes().toString().padStart(2, '0');
     }
-    else if (texto.includes("bachiller") || texto.includes("egresado")) {
-      botMensaje("🎓 <b>Oficina de Atención al Egresado:</b><br>Contacto: Melissa Coello<br>📧 <b>melissa.coello@udep.edu.pe</b><br>Anexo: 3109");
-    }
-    else if (texto.includes("reclamo") || texto.includes("queja")) {
-      botMensaje("📝 Para temas de reclamos de evaluaciones, recuerda que los 1ros reclamos se presentan mediante el buzón oficial. ¿Deseas más información?");
-      crearBotonesDinamicos([
-        { texto: "⏱️ ¿Qué pasa fuera de plazo?", valor: "reclamo fuera de plazo" },
-        { texto: "📄 Ver Hoja de Reclamos", valor: "Ver Hoja de Reclamos PDF" }
-      ]);
-    }
-    else if (texto.includes("fuera de plazo")) {
-      botMensaje("No procederá ya que son plazos normativos estrictamente establecidos.");
-    }
-    else if (texto.includes("secretaría") || texto.includes("secretaria")) {
-      botMensaje("🏢 <b>Horario de atención en Secretaría Académica:</b><br>Mañanas: 10:00 am - 12:30 pm<br>Tardes: 4:10 pm - 5:30 pm<br>📞 Anexo: 3113");
-    }
-    else if (texto.includes("hola") || texto.includes("buenas")) {
-      botMensaje("¡Hola! Soy Jarvis. Puedes hacerme cualquier consulta o explorar las secciones de la barra superior 👆🏼.");
-    }
-    else {
-      botMensaje("Entendido. Estoy procesando tu consulta de manera dinámica.");
-    }
-  }
 
-  // Ejecutar acción enviada desde las pestañas o tarjetas
-  function ejecutarAccion(textoConsulta) {
-    // Cambiar automáticamente a la vista de chat si está en otra pestaña
-    const primerTab = document.querySelectorAll(".tab-btn")[0];
-    cambiarVista('chatView', primerTab);
-
-    usuarioMensaje(textoConsulta);
-    setTimeout(() => {
-      procesarRespuesta(textoConsulta);
-    }, 400);
-  }
-
-  // Enviar desde el campo de texto
-  function enviar() {
-    const texto = input.value.trim();
-    if (texto === "") return;
-
-    ejecutarAccion(texto);
-    input.value = "";
-  }
-
-  // Event Listeners
-  btnEnviar.addEventListener("click", enviar);
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      enviar();
+    function bot(msg) {
+      const div = document.createElement("div");
+      div.className = "msg bot";
+      div.innerHTML = msg + `<div class="time">${hora()}</div>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
     }
-  });
 
-  // Inicio automático
-  window.onload = () => {
-    botMensaje("¡Hola! Bienvenido al nuevo panel dinámico de Jarvis. Selecciona una opción o escríbeme directamente 👇🏼.");
-    crearBotonesDinamicos([
-      { texto: "🧭 Trámites frecuentes", valor: "cambio de carrera" },
-      { texto: "🏢 Horario de Secretaría", valor: "secretaría" }
-    ]);
-  };
-</script>
+    function user(msg) {
+      const div = document.createElement("div");
+      div.className = "msg user";
+      div.innerHTML = msg + `<div class="time">${hora()}</div>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
+    function botonesContextuales(lista) {
+      limpiarContextuales();
+      const contenedor = document.createElement("div");
+      contenedor.className = "ctx-container";
+      lista.forEach(item => {
+        const b = document.createElement("button");
+        b.className = "ctx-btn";
+        b.innerHTML = item.texto;
+        b.onclick = () => {
+          input.value = item.valor;
+          enviar();
+        };
+        contenedor.appendChild(b);
+      });
+      chat.appendChild(contenedor);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function limpiarContextuales() {
+      document.querySelectorAll(".ctx-container").forEach(c => c.remove());
+    }
+
+    function ejecutarMenu(opcion) {
+      drawer.classList.remove('open');
+      responder(opcion);
+    }
+
+    function responder(t) {
+      limpiarContextuales();
+      if(t==="1"){
+        bot("🕒 Horario de atención en ventanilla: 9:00 am - 12:30 pm y 4:00 pm - 6:00 pm");
+      }
+      else if(t==="2"){
+        bot("🕒 Horario de atención en secretaría: 10:00 am - 12:30 pm y 4:10 pm - 5:30 pm<br>📞 Anexo: 3113");
+      }
+      else if(t==="3"){
+        bot(`📚 <b>Reserva de sala:</b><br><br>
+Enviar correo a: <b style="color:#00f3ff;">safcceeee-piura@udep.edu.pe</b><br>
+✓ Mínimo 3 y máximo 6 integrantes.<br>
+✓ Mínimo 2 días hábiles de anticipación.`);
+      }
+      else if(t==="4"){
+        bot("📄 <b>Exámenes y Calendario:</b>");
+        const b1 = document.createElement("button");
+        b1.className = "btn-action";
+        b1.innerHTML = "🔗 Exámenes disponibles para recoger";
+        b1.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:x:/g/personal/rosamaria_masias_udep_edu_pe/EWihxMsRb25Iuvkhp9RDLj0Bo7taaxBWoC3Zp5dMNehltQ?rtime=SpHsHsNV3Ug", "_blank");
+        chat.appendChild(b1);
+
+        const b2 = document.createElement("button");
+        b2.className = "btn-action";
+        b2.innerHTML = "📅 Calendario Académico PDF";
+        b2.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQAdJf7wjXsIRIHlr_2phXDQAW8NxF2VNk6DrKX2avNOo-8?e=RW95nO", "_blank");
+        chat.appendChild(b2);
+      }
+      else if(t==="tramites"){
+        bot("🧭 <b>Trámites disponibles:</b>");
+        botonesContextuales([
+          { texto: "🔄 Cambio de Carrera", valor: "cambio de carrera" },
+          { texto: "🚫 Retiro de Curso / Carrera", valor: "retiro de curso" },
+          { texto: "🎓 Bachiller / Egresados", valor: "egresado" }
+        ]);
+      }
+      else if(t==="guias"){
+        bot("📂 <b>Documentos Oficiales PDF:</b>");
+        const b1 = document.createElement("button");
+        b1.className = "btn-action";
+        b1.innerHTML = "📖 Reglamento General (RFAG)";
+        b1.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQD2Bdh1K4taQLBEopwA3SHpAXL9Vbua01jwbjK-R8dcClA?e=b5joDQ", "_blank");
+        chat.appendChild(b1);
+
+        const b2 = document.createElement("button");
+        b2.className = "btn-action";
+        b2.innerHTML = "📝 Hoja de Reclamos PDF";
+        b2.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQApyzFylfSHT4PI6uVe40POATy9_WrsoGT8qSS2KcGM3Xk?e=47Zyzt", "_blank");
+        chat.appendChild(b2);
+
+        const b3 = document.createElement("button");
+        b3.className = "btn-action";
+        b3.innerHTML = "📑 Reprogramación de Exámenes PDF";
+        b3.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQDVIEWE_E86QYQnR95mGdklAelvUof1yBpGsEASJy3Jpsg?e=1pB4TL", "_blank");
+        chat.appendChild(b3);
+      }
+      else if(t==="pdf_clc"){
+        bot("📢 <b>Comunicado Oficial CLC:</b><br>Para convalidar o registrar tu CLC, tienes que estar atento a los avisos de SIGA y CANVAS, ahí se establecen fechas fijas donde puedes presentar :)");
+      }
+      else if(t==="cambio_carrera"){
+        bot("📣 <b>Comunicado Cambio de Carrera:</b><br>Para solicitar un cambio de carrera, es necesario mandar un correo a secretaría académica para obtener todo de manera detallada y precisa.");
+      }
+      else if(t==="retiro_curso"){
+        bot("📣 <b>Comunicado Retiro de Curso / Carrera:</b><br>Los retiros se hacen a través del SIGA, en la parte de trámites, para tener más información puedes mandar un correo a secretaría académica :)");
+      }
+      else if(t==="egresado"){
+        bot("🎓 <b>Oficina de Atención al Egresado:</b><br>Contacto: Melissa Coello<br>📧 melissa.coello@udep.edu.pe<br>📞 Anexo: 3109");
+      }
+    }
+
+    function enviar() {
+      const texto = input.value.trim().toLowerCase();
+      if(texto === "") return;
+      input.value = "";
+      user(texto);
+      limpiarContextuales();
+
+      const verificar = (lista) => lista.some(p => texto.includes(p));
+
+      if(verificar(["cambio de carrera", "cambiar de carrera"])) {
+        responder("cambio_carrera");
+      }
+      else if(verificar(["retiro de curso", "retirar curso", "retiro de carrera"])) {
+        responder("retiro_curso");
+      }
+      else if(verificar(["clc", "convalidar ingles", "convalidar inglés"])) {
+        responder("pdf_clc");
+      }
+      else if(verificar(["reglamento", "rfag"])) {
+        responder("guias");
+      }
+      else if(verificar(["horario", "secretaria", "ventanilla"])) {
+        responder("2");
+      }
+      else if(verificar(["creador", "lazaro", "lázaro", "purizaca"])) {
+        bot("Mi creador es Lázaro Purizaca, estudió en UDEP como tú.");
+      }
+      else if(verificar(["hola", "buenas", "jarvis"])) {
+        bot("¡Hola! Soy Jarvis 👋🏼🏼. ¿En qué puedo asesorarte hoy sobre la facultad?");
+      }
+      else {
+        bot("Disculpa, mi creador aún me está educando para poder comprender todo.");
+      }
+    }
+
+    btnEnviar.addEventListener("click", enviar);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        enviar();
+      }
+    });
+
+    window.onload = () => {
+      bot("<b>Hola, soy Jarvis 👋</b><br>Asistente Virtual de CC.EE.EE - UDEP.<br>Abre el menú desplegable inferior o escríbeme directamente.");
+    };
+  </script>
 </body>
 </html>
