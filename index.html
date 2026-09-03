@@ -22,7 +22,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
@@ -35,7 +35,7 @@
       flex-direction: column;
     }
 
-    /* Top Navigation Bar */
+    /* Top Bar */
     .top-bar {
       position: fixed;
       top: 0;
@@ -50,7 +50,6 @@
       align-items: center;
       padding: 0 20px;
       z-index: 1000;
-      backdrop-filter: blur(5px);
     }
 
     .brand {
@@ -59,9 +58,7 @@
       gap: 10px;
       font-size: 1.1rem;
       font-weight: bold;
-      letter-spacing: 2px;
       color: var(--primary-glow);
-      text-shadow: 0 0 8px var(--primary-glow);
     }
 
     .brand img {
@@ -80,18 +77,15 @@
     .clock {
       font-size: 1.2rem;
       font-weight: bold;
-      letter-spacing: 2px;
       color: var(--primary-glow);
-      text-shadow: 0 0 10px var(--primary-glow);
     }
 
     .date {
       font-size: 0.7rem;
       color: #8a9ba8;
-      letter-spacing: 1px;
     }
 
-    /* Contenedor del Chat Principal */
+    /* Chat Container */
     #app-container {
       flex: 1;
       max-width: 440px;
@@ -102,9 +96,7 @@
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
       overflow: hidden;
-      backdrop-filter: blur(10px);
     }
 
     #chat {
@@ -123,7 +115,6 @@
       font-size: 13.5px;
       line-height: 1.4;
       word-wrap: break-word;
-      animation: fadeIn 0.2s ease-in-out;
     }
 
     .bot {
@@ -138,7 +129,6 @@
       color: #ffffff;
       align-self: flex-end;
       border-bottom-right-radius: 2px;
-      box-shadow: 0 0 10px rgba(0, 58, 143, 0.5);
     }
 
     .time {
@@ -146,31 +136,6 @@
       opacity: 0.75;
       text-align: right;
       margin-top: 4px;
-    }
-
-    .ctx-container {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin: 6px 0;
-    }
-
-    .ctx-btn {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--primary-glow);
-      border: 1px solid var(--primary-glow);
-      padding: 8px 12px;
-      border-radius: 18px;
-      font-size: 12px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s ease;
-    }
-
-    .ctx-btn:hover {
-      background: var(--primary-glow);
-      color: #050811;
-      font-weight: 600;
     }
 
     /* Input Area */
@@ -193,11 +158,6 @@
       outline: none;
     }
 
-    #input:focus {
-      border-color: var(--primary-glow);
-      box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
-    }
-
     .send-btn {
       width: 40px;
       height: 40px;
@@ -206,12 +166,9 @@
       color: white;
       border: 1px solid var(--primary-glow);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    /* Bottom Taskbar Drawer */
+    /* Taskbar Menu */
     .taskbar-wrapper {
       position: fixed;
       bottom: 0;
@@ -231,14 +188,12 @@
       width: 320px;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-      box-shadow: 0 -5px 25px rgba(0, 243, 255, 0.2);
-      backdrop-filter: blur(10px);
+      transition: max-height 0.3s ease;
     }
 
     .menu-drawer.open {
-      max-height: 320px;
-      padding: 15px 0;
+      max-height: 200px;
+      padding: 10px 0;
     }
 
     .menu-options {
@@ -246,21 +201,17 @@
     }
 
     .menu-options li a {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 25px;
+      display: block;
+      padding: 10px 20px;
       color: #e0f7fc;
       text-decoration: none;
       font-size: 0.9rem;
-      transition: all 0.2s ease;
       cursor: pointer;
     }
 
     .menu-options li a:hover {
       background: rgba(0, 243, 255, 0.15);
       color: var(--primary-glow);
-      padding-left: 30px;
     }
 
     .taskbar-trigger {
@@ -272,20 +223,7 @@
       cursor: pointer;
       color: var(--primary-glow);
       font-weight: bold;
-      letter-spacing: 2px;
-      box-shadow: 0 -2px 15px rgba(0, 243, 255, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 8px;
       font-size: 12px;
-    }
-
-    .icon-arrow {
-      transition: transform 0.3s ease;
-    }
-
-    .menu-drawer.open + .taskbar-trigger .icon-arrow {
-      transform: rotate(180deg);
     }
 
     .footer-creditos {
@@ -294,11 +232,6 @@
       color: #818cf8;
       padding: 4px;
       background: rgba(10, 15, 26, 0.95);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -321,67 +254,63 @@
     <div id="chat"></div>
 
     <div id="inputArea">
-      <input id="input" type="text" placeholder="Escribe tu mensaje..." autocomplete="off">
+      <input id="input" type="text" placeholder="Escribe un mensaje..." autocomplete="off">
       <button class="send-btn" id="btnEnviar">➤</button>
     </div>
     <div class="footer-creditos">Desarrollado por: Lázaro Purizaca</div>
   </div>
 
-  <!-- Sliding Taskbar Menu -->
+  <!-- Taskbar Menu -->
   <div class="taskbar-wrapper">
     <div id="menuDrawer" class="menu-drawer">
       <ul class="menu-options">
-        <li><a onclick="ejecutarMenu('opcion1')"><span>📌</span> Opción 1</a></li>
-        <li><a onclick="ejecutarMenu('opcion2')"><span>⚙️</span> Opción 2</a></li>
-        <li><a onclick="ejecutarMenu('opcion3')"><span>📂</span> Opción 3</a></li>
+        <li><a onclick="ejecutarMenu('Opción 1')">📌 Opción 1</a></li>
+        <li><a onclick="ejecutarMenu('Opción 2')">⚙️ Opción 2</a></li>
+        <li><a onclick="ejecutarMenu('Opción 3')">📂 Opción 3</a></li>
       </ul>
     </div>
-    <button id="taskbarTrigger" class="taskbar-trigger">
-      MENÚ <span class="icon-arrow">&#x25B2;</span>
-    </button>
+    <button id="taskbarTrigger" class="taskbar-trigger">MENÚ ▲</button>
   </div>
 
   <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    const btnEnviar = document.getElementById("btnEnviar");
+    var chat = document.getElementById("chat");
+    var input = document.getElementById("input");
+    var btnEnviar = document.getElementById("btnEnviar");
 
-    // Reloj Digital
     function updateClock() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
+      var now = new Date();
+      var hours = String(now.getHours()).padStart(2, '0');
+      var minutes = String(now.getMinutes()).padStart(2, '0');
+      var seconds = String(now.getSeconds()).padStart(2, '0');
       document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
 
-      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      var options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
       document.getElementById('date').textContent = now.toLocaleDateString('es-ES', options).toUpperCase();
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Menú Desplegable
-    const trigger = document.getElementById('taskbarTrigger');
-    const drawer = document.getElementById('menuDrawer');
+    var trigger = document.getElementById('taskbarTrigger');
+    var drawer = document.getElementById('menuDrawer');
 
-    trigger.addEventListener('click', (e) => {
+    trigger.addEventListener('click', function(e) {
       e.stopPropagation();
       drawer.classList.toggle('open');
     });
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
       if (!drawer.contains(e.target) && !trigger.contains(e.target)) {
         drawer.classList.remove('open');
       }
     });
 
     function hora() {
-      const d = new Date();
-      return d.getHours() + ":" + d.getMinutes().toString().padStart(2, '0');
+      var d = new Date();
+      return d.getHours() + ":" + String(d.getMinutes()).padStart(2, '0');
     }
 
     function bot(msg) {
-      const div = document.createElement("div");
+      var div = document.createElement("div");
       div.className = "msg bot";
       div.innerHTML = msg + '<div class="time">' + hora() + '</div>';
       chat.appendChild(div);
@@ -389,7 +318,7 @@
     }
 
     function user(msg) {
-      const div = document.createElement("div");
+      var div = document.createElement("div");
       div.className = "msg user";
       div.innerHTML = msg + '<div class="time">' + hora() + '</div>';
       chat.appendChild(div);
@@ -398,39 +327,32 @@
 
     function ejecutarMenu(opcion) {
       drawer.classList.remove('open');
-      if (opcion === 'opcion1') {
-        bot("Seleccionaste la Opción 1.");
-      } else if (opcion === 'opcion2') {
-        bot("Seleccionaste la Opción 2.");
-      } else if (opcion === 'opcion3') {
-        bot("Seleccionaste la Opción 3.");
-      }
+      bot("Seleccionaste: " + opcion);
     }
 
     function enviar() {
-      const texto = input.value.trim();
+      var texto = input.value.trim();
       if (texto === "") return;
       input.value = "";
       user(texto);
 
-      // AQUÍ PUEDES DEFINIR TUS NUEVAS RESPUESTAS Y LÓGICA
-      if (texto.toLowerCase().includes("hola")) {
-        bot("¡Hola! Soy tu nuevo Jarvis. ¿De qué trata este nuevo proyecto?");
+      if (texto.toLowerCase().indexOf("hola") !== -1) {
+        bot("¡Hola! Sistema activo. ¿En qué te ayudo hoy?");
       } else {
-        bot("Entendido. Mensaje recibido en el nuevo sistema.");
+        bot("Mensaje recibido: " + texto);
       }
     }
 
     btnEnviar.addEventListener("click", enviar);
-    input.addEventListener("keydown", (e) => {
+    input.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
         enviar();
       }
     });
 
-    window.onload = () => {
-      bot("<b>Jarvis System Online 👋</b><br>Bienvenido al nuevo sistema.");
+    window.onload = function() {
+      bot("<b>Jarvis System Online 👋</b><br>Haz clic en el menú inferior o escribe tu mensaje.");
     };
   </script>
 </body>
