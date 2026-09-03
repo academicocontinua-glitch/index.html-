@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JARVIS - UDEP Interface</title>
+  <title>JARVIS System</title>
 
   <!-- Favicon / Ícono de la pestaña -->
   <link rel="icon" href="mascota.png.jfif">
@@ -14,7 +14,7 @@
     :root {
       --primary: #003A8F;
       --primary-glow: #00f3ff;
-      --bg-dark: rgba(10, 15, 26, 0.9);
+      --bg-dark: rgba(10, 15, 26, 0.92);
       --border-color: rgba(0, 243, 255, 0.4);
     }
 
@@ -94,12 +94,12 @@
     /* Contenedor del Chat Principal */
     #app-container {
       flex: 1;
-      max-width: 480px;
+      max-width: 440px;
       width: 100%;
       margin: 70px auto 70px auto;
       display: flex;
       flex-direction: column;
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 16px;
       box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
@@ -117,7 +117,7 @@
     }
 
     .msg {
-      max-width: 80%;
+      max-width: 82%;
       padding: 12px 14px;
       border-radius: 14px;
       font-size: 13.5px;
@@ -146,27 +146,6 @@
       opacity: 0.75;
       text-align: right;
       margin-top: 4px;
-    }
-
-    .btn-action {
-      width: 100%;
-      padding: 12px;
-      font-size: 13.5px;
-      margin: 4px 0;
-      border-radius: 10px;
-      background: var(--primary);
-      color: white;
-      border: 1px solid var(--primary-glow);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-action:hover {
-      background: #002b6b;
-      box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
     }
 
     .ctx-container {
@@ -258,7 +237,7 @@
     }
 
     .menu-drawer.open {
-      max-height: 280px;
+      max-height: 320px;
       padding: 15px 0;
     }
 
@@ -309,6 +288,14 @@
       transform: rotate(180deg);
     }
 
+    .footer-creditos {
+      text-align: center;
+      font-size: 10px;
+      color: #818cf8;
+      padding: 4px;
+      background: rgba(10, 15, 26, 0.95);
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -321,7 +308,7 @@
   <header class="top-bar">
     <div class="brand">
       <img src="mascota.png.jfif" alt="Logo" onerror="this.src='https://via.placeholder.com/32'">
-      JARVIS UDEP
+      JARVIS SYSTEM
     </div>
     <div class="clock-container">
       <div id="clock" class="clock">00:00:00</div>
@@ -334,21 +321,19 @@
     <div id="chat"></div>
 
     <div id="inputArea">
-      <input id="input" type="text" placeholder="Escribe 'Hola' o tu consulta..." autocomplete="off">
+      <input id="input" type="text" placeholder="Escribe tu mensaje..." autocomplete="off">
       <button class="send-btn" id="btnEnviar">➤</button>
     </div>
+    <div class="footer-creditos">Desarrollado por: Lázaro Purizaca</div>
   </div>
 
   <!-- Sliding Taskbar Menu -->
   <div class="taskbar-wrapper">
     <div id="menuDrawer" class="menu-drawer">
       <ul class="menu-options">
-        <li><a onclick="ejecutarMenu('1')"><span>🕒</span> Horarios de Ventanilla</a></li>
-        <li><a onclick="ejecutarMenu('2')"><span>🏢</span> Horarios de Secretaría</a></li>
-        <li><a onclick="ejecutarMenu('3')"><span>📚</span> Reservar Sala de Estudio</a></li>
-        <li><a onclick="ejecutarMenu('4')"><span>📅</span> Calendario y Exámenes</a></li>
-        <li><a onclick="ejecutarMenu('tramites')"><span>🧭</span> Sección de Trámites</a></li>
-        <li><a onclick="ejecutarMenu('guias')"><span>📂</span> Documentos & Guías PDF</a></li>
+        <li><a onclick="ejecutarMenu('opcion1')"><span>📌</span> Opción 1</a></li>
+        <li><a onclick="ejecutarMenu('opcion2')"><span>⚙️</span> Opción 2</a></li>
+        <li><a onclick="ejecutarMenu('opcion3')"><span>📂</span> Opción 3</a></li>
       </ul>
     </div>
     <button id="taskbarTrigger" class="taskbar-trigger">
@@ -360,15 +345,14 @@
     const chat = document.getElementById("chat");
     const input = document.getElementById("input");
     const btnEnviar = document.getElementById("btnEnviar");
-    let contextoGlobal = "";
 
-    // Digital Clock
+    // Reloj Digital
     function updateClock() {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
       const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+      document.getElementById('clock').textContent = hours + ":" + minutes + ":" + seconds;
 
       const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
       document.getElementById('date').textContent = now.toLocaleDateString('es-ES', options).toUpperCase();
@@ -376,7 +360,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Drawer Logic
+    // Menú Desplegable
     const trigger = document.getElementById('taskbarTrigger');
     const drawer = document.getElementById('menuDrawer');
 
@@ -399,7 +383,7 @@
     function bot(msg) {
       const div = document.createElement("div");
       div.className = "msg bot";
-      div.innerHTML = msg + `<div class="time">${hora()}</div>`;
+      div.innerHTML = msg + '<div class="time">' + hora() + '</div>';
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
@@ -407,140 +391,33 @@
     function user(msg) {
       const div = document.createElement("div");
       div.className = "msg user";
-      div.innerHTML = msg + `<div class="time">${hora()}</div>`;
+      div.innerHTML = msg + '<div class="time">' + hora() + '</div>';
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
     }
 
-    function botonesContextuales(lista) {
-      limpiarContextuales();
-      const contenedor = document.createElement("div");
-      contenedor.className = "ctx-container";
-      lista.forEach(item => {
-        const b = document.createElement("button");
-        b.className = "ctx-btn";
-        b.innerHTML = item.texto;
-        b.onclick = () => {
-          input.value = item.valor;
-          enviar();
-        };
-        contenedor.appendChild(b);
-      });
-      chat.appendChild(contenedor);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function limpiarContextuales() {
-      document.querySelectorAll(".ctx-container").forEach(c => c.remove());
-    }
-
     function ejecutarMenu(opcion) {
       drawer.classList.remove('open');
-      responder(opcion);
-    }
-
-    function responder(t) {
-      limpiarContextuales();
-      if(t==="1"){
-        bot("🕒 Horario de atención en ventanilla: 9:00 am - 12:30 pm y 4:00 pm - 6:00 pm");
-      }
-      else if(t==="2"){
-        bot("🕒 Horario de atención en secretaría: 10:00 am - 12:30 pm y 4:10 pm - 5:30 pm<br>📞 Anexo: 3113");
-      }
-      else if(t==="3"){
-        bot(`📚 <b>Reserva de sala:</b><br><br>
-Enviar correo a: <b style="color:#00f3ff;">safcceeee-piura@udep.edu.pe</b><br>
-✓ Mínimo 3 y máximo 6 integrantes.<br>
-✓ Mínimo 2 días hábiles de anticipación.`);
-      }
-      else if(t==="4"){
-        bot("📄 <b>Exámenes y Calendario:</b>");
-        const b1 = document.createElement("button");
-        b1.className = "btn-action";
-        b1.innerHTML = "🔗 Exámenes disponibles para recoger";
-        b1.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:x:/g/personal/rosamaria_masias_udep_edu_pe/EWihxMsRb25Iuvkhp9RDLj0Bo7taaxBWoC3Zp5dMNehltQ?rtime=SpHsHsNV3Ug", "_blank");
-        chat.appendChild(b1);
-
-        const b2 = document.createElement("button");
-        b2.className = "btn-action";
-        b2.innerHTML = "📅 Calendario Académico PDF";
-        b2.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQAdJf7wjXsIRIHlr_2phXDQAW8NxF2VNk6DrKX2avNOo-8?e=RW95nO", "_blank");
-        chat.appendChild(b2);
-      }
-      else if(t==="tramites"){
-        bot("🧭 <b>Trámites disponibles:</b>");
-        botonesContextuales([
-          { texto: "🔄 Cambio de Carrera", valor: "cambio de carrera" },
-          { texto: "🚫 Retiro de Curso / Carrera", valor: "retiro de curso" },
-          { texto: "🎓 Bachiller / Egresados", valor: "egresado" }
-        ]);
-      }
-      else if(t==="guias"){
-        bot("📂 <b>Documentos Oficiales PDF:</b>");
-        const b1 = document.createElement("button");
-        b1.className = "btn-action";
-        b1.innerHTML = "📖 Reglamento General (RFAG)";
-        b1.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQD2Bdh1K4taQLBEopwA3SHpAXL9Vbua01jwbjK-R8dcClA?e=b5joDQ", "_blank");
-        chat.appendChild(b1);
-
-        const b2 = document.createElement("button");
-        b2.className = "btn-action";
-        b2.innerHTML = "📝 Hoja de Reclamos PDF";
-        b2.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQApyzFylfSHT4PI6uVe40POATy9_WrsoGT8qSS2KcGM3Xk?e=47Zyzt", "_blank");
-        chat.appendChild(b2);
-
-        const b3 = document.createElement("button");
-        b3.className = "btn-action";
-        b3.innerHTML = "📑 Reprogramación de Exámenes PDF";
-        b3.onclick = () => window.open("https://udepoffice365ms-my.sharepoint.com/:b:/g/personal/lazaro_purizaca_g_udep_edu_pe/IQDVIEWE_E86QYQnR95mGdklAelvUof1yBpGsEASJy3Jpsg?e=1pB4TL", "_blank");
-        chat.appendChild(b3);
-      }
-      else if(t==="pdf_clc"){
-        bot("📢 <b>Comunicado Oficial CLC:</b><br>Para convalidar o registrar tu CLC, tienes que estar atento a los avisos de SIGA y CANVAS, ahí se establecen fechas fijas donde puedes presentar :)");
-      }
-      else if(t==="cambio_carrera"){
-        bot("📣 <b>Comunicado Cambio de Carrera:</b><br>Para solicitar un cambio de carrera, es necesario mandar un correo a secretaría académica para obtener todo de manera detallada y precisa.");
-      }
-      else if(t==="retiro_curso"){
-        bot("📣 <b>Comunicado Retiro de Curso / Carrera:</b><br>Los retiros se hacen a través del SIGA, en la parte de trámites, para tener más información puedes mandar un correo a secretaría académica :)");
-      }
-      else if(t==="egresado"){
-        bot("🎓 <b>Oficina de Atención al Egresado:</b><br>Contacto: Melissa Coello<br>📧 melissa.coello@udep.edu.pe<br>📞 Anexo: 3109");
+      if (opcion === 'opcion1') {
+        bot("Seleccionaste la Opción 1.");
+      } else if (opcion === 'opcion2') {
+        bot("Seleccionaste la Opción 2.");
+      } else if (opcion === 'opcion3') {
+        bot("Seleccionaste la Opción 3.");
       }
     }
 
     function enviar() {
-      const texto = input.value.trim().toLowerCase();
-      if(texto === "") return;
+      const texto = input.value.trim();
+      if (texto === "") return;
       input.value = "";
       user(texto);
-      limpiarContextuales();
 
-      const verificar = (lista) => lista.some(p => texto.includes(p));
-
-      if(verificar(["cambio de carrera", "cambiar de carrera"])) {
-        responder("cambio_carrera");
-      }
-      else if(verificar(["retiro de curso", "retirar curso", "retiro de carrera"])) {
-        responder("retiro_curso");
-      }
-      else if(verificar(["clc", "convalidar ingles", "convalidar inglés"])) {
-        responder("pdf_clc");
-      }
-      else if(verificar(["reglamento", "rfag"])) {
-        responder("guias");
-      }
-      else if(verificar(["horario", "secretaria", "ventanilla"])) {
-        responder("2");
-      }
-      else if(verificar(["creador", "lazaro", "lázaro", "purizaca"])) {
-        bot("Mi creador es Lázaro Purizaca, estudió en UDEP como tú.");
-      }
-      else if(verificar(["hola", "buenas", "jarvis"])) {
-        bot("¡Hola! Soy Jarvis 👋🏼🏼. ¿En qué puedo asesorarte hoy sobre la facultad?");
-      }
-      else {
-        bot("Disculpa, mi creador aún me está educando para poder comprender todo.");
+      // AQUÍ PUEDES DEFINIR TUS NUEVAS RESPUESTAS Y LÓGICA
+      if (texto.toLowerCase().includes("hola")) {
+        bot("¡Hola! Soy tu nuevo Jarvis. ¿De qué trata este nuevo proyecto?");
+      } else {
+        bot("Entendido. Mensaje recibido en el nuevo sistema.");
       }
     }
 
@@ -553,7 +430,7 @@ Enviar correo a: <b style="color:#00f3ff;">safcceeee-piura@udep.edu.pe</b><br>
     });
 
     window.onload = () => {
-      bot("<b>Hola, soy Jarvis 👋</b><br>Asistente Virtual de CC.EE.EE - UDEP.<br>Abre el menú desplegable inferior o escríbeme directamente.");
+      bot("<b>Jarvis System Online 👋</b><br>Bienvenido al nuevo sistema.");
     };
   </script>
 </body>
